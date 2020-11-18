@@ -5,6 +5,7 @@ import json
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
 import os
+import requests
 
 app.secret_key = os.getenv("SECRET_KEY")
 oauth = OAuth(app)
@@ -21,7 +22,7 @@ def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'profile' not in session:
-            return "Not Authorized. Error 401 | IchBinsTim",401
+            return render_template('public/home.html')
         return f(*args, **kwargs)
     return decorated
 
@@ -30,9 +31,12 @@ def callback_handling():
     auth0.authorize_access_token()
     resp = auth0.get('userinfo')
     userinfo = resp.json()
+    
+    print(userinfo)
     session['jwt_payload'] = userinfo
-    session['profile'] = {'user_id': userinfo['sub'],'name': userinfo['name'],'picture': userinfo['picture']}
-    print(session)
+    session['profile'] = {'user_id': userinfo['sub'],'name': userinfo['name'],'email': userinfo['email'],'picture': userinfo['picture']}
+    print(session['profile']['name'])
+  
     return redirect('/')
 
 @app.route('/login')

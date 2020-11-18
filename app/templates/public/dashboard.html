@@ -1,0 +1,48 @@
+{% extends "public/templates/dashboard_template.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+
+{% block li %}
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white act" href="/dashboard">Dashboard</a>
+</li>
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white" href="/dashboard-tmp/watchlist">Watchlist</a>
+</li>
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white" href="/dashboard-tmp/alerts">Alerts</a>
+</li>
+
+{% endblock %}
+
+
+{% block main %}   
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 style="text-align:center;">IchBinsTim Dashboard</h1>
+            <h4 style="text-align:center;">Dezember Challenge</h14>
+            <br>
+            <br>
+            <hr>
+            <button onclick="refreshanalyse()" class="btn btn-primary">Refresh Analyse</button>
+            <hr>
+            <br>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block script %}  
+<script>
+
+
+</script>
+{% endblock %}
+
+

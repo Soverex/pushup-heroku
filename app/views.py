@@ -1,15 +1,23 @@
 from app import app
 from app.secviews import requires_auth
 import os
+from flask import Flask, render_template, flash
 
 
 @app.route("/")
 @requires_auth
 def index():
-    return "Logged In MO"
+        #flash('Erfolgreich eingeloggt')
+        return render_template("public/home.html")
+
+@app.route("/dashboard")
+@requires_auth
+def dashboard():
+        #flash('Erfolgreich eingeloggt')
+        return render_template("public/dashboard.html")
 
 @app.route("/moin") 
-#@requires_auth
+@requires_auth
 def home_view(): 
         moin = os.getenv("BASE_URL")
         return f"LOL VAR: {moin}"
