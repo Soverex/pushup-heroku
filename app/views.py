@@ -14,7 +14,12 @@ def index():
 @requires_auth
 def dashboard():
         #flash('Erfolgreich eingeloggt')
-        return render_template("public/dashboard.html")
+        userinfo = {
+                "team": "Pepegas",
+                "pushup_today": 9,
+                "pushup_month": 56
+        }
+        return render_template("public/dashboard.html", userinfo=userinfo)
 
 @app.route("/moin") 
 @requires_auth

@@ -8,41 +8,61 @@
     <a id="hover1" class="nav-link white act" href="/dashboard">Dashboard</a>
 </li>
 <li class="navbar-brand nav-item">
-    <a id="hover1" class="nav-link white" href="/dashboard-tmp/watchlist">Watchlist</a>
+    <a id="hover1" class="nav-link white" href="/statistics">Statistiken</a>
 </li>
 <li class="navbar-brand nav-item">
-    <a id="hover1" class="nav-link white" href="/dashboard-tmp/alerts">Alerts</a>
+    <a id="hover1" class="nav-link white" href="/admin">Admin</a>
 </li>
 
 {% endblock %}
 
 
-{% block main %}   
+{% block main %}
 
 <div class="container">
     <div class="row">
         <div class="col">
             <h1 style="text-align:center;">IchBinsTim Dashboard</h1>
-            <h4 style="text-align:center;">Dezember Challenge</h14>
-            <br>
+            <h4 style="text-align:center;">Dezember Challenge</h4>
             <br>
             <hr>
-            <button onclick="refreshanalyse()" class="btn btn-primary">Refresh Analyse</button>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Dein Name:</td>
+                        <td><b>{{ session['profile']['name'] }}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Dein Team</td>
+                        <td><b>{{ userinfo['team']}}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Deine Push Ups heute:</td>
+                        <td><b>{{ userinfo['pushup_today'] }}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Deine Push Ups im Dez:</td>
+                        <td><b>{{ userinfo['pushup_month'] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
+            <br>
+            <hr>
+            <div class="col text-center">
+                <button onclick="startDashboard()" class="btn btn-primary">Pushups machen</button>
+            </div>
             <hr>
             <br>
         </div>
     </div>
 </div>
 
-
-
 {% endblock %}
 
-{% block script %}  
+{% block script %}
 <script>
 
 
 </script>
 {% endblock %}
-
-

@@ -31,12 +31,8 @@ def callback_handling():
     auth0.authorize_access_token()
     resp = auth0.get('userinfo')
     userinfo = resp.json()
-    
-    print(userinfo)
     session['jwt_payload'] = userinfo
     session['profile'] = {'user_id': userinfo['sub'],'name': userinfo['name'],'email': userinfo['email'],'picture': userinfo['picture']}
-    print(session['profile']['name'])
-  
     return redirect('/')
 
 @app.route('/login')
