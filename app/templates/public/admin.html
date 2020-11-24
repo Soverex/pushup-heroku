@@ -1,0 +1,49 @@
+{% extends "public/templates/dashboard_template.html" %}
+
+{% block title %} Pushup {% endblock %}
+
+
+{% block li %}
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white" href="/dashboard">Dashboard</a>
+</li>
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white" href="/pushup">Pushup</a>
+</li>
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white" href="/statistics">Statistiken</a>
+</li>
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white act" href="/admin">Admin</a>
+</li>
+
+{% endblock %}
+
+
+{% block main %}
+
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <h1 style="text-align:center;">IchBinsTim Admin</h1>
+            <h4 style="text-align:center;">Dezember Challenge</h4>
+            <p>Nothing here :(</p>
+            <div class="col text-center">
+                <button onclick="startDashboard()" class="btn btn-primary">Zurück</button>
+            </div>
+            <hr>
+            <br>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+function startDashboard(){
+    window.location.href = "/dashboard";
+}
+
+</script>
+{% endblock %}

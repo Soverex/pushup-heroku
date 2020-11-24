@@ -29,6 +29,16 @@ def dashboard():
 def pushup(): 
         return render_template("public/pushup.html", base=os.getenv("BASE_URL"), user_mail=session['profile']['email'])
 
+@app.route("/statistics") 
+@requires_auth
+def statistics(): 
+        return render_template("public/statistics.html")
+
+@app.route("/admin") 
+@requires_auth
+def admin(): 
+        return render_template("public/admin.html")
+
 @app.route("/api/data", methods=['POST']) 
 @requires_auth
 def api_data():
