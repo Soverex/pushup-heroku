@@ -29,8 +29,10 @@ def pushup():
 def api_data():
         if request.form.get("action") == "addpushup" and request.form.get("user") != "":
                 addpushup(request.form.get("user"))
+                data = getpushup_data(request.form.get("user"))
                 return{
                         "success" : "true",
+                        "data"    : f"{data}",
                 }
         else:
                 return {
@@ -39,13 +41,28 @@ def api_data():
 
 def addpushup(user):
     try:
-        print(user)
         connection = psycopg2.connect(os.getenv("DATABASE_URL"))
         cursor = connection.cursor()
         cursor.execute(f"INSERT INTO \"pushup\" (user_email, datetime, pushup) VALUES ('{user}', current_timestamp, 1);")
         connection.commit()
     except (Exception, psycopg2.Error) as error :
         print ("Error while connecting to PostgreSQL", error)
+    finally:
+            if(connection):
+                cursor.close()
+                connection.close()
+                print("PostgreSQL connection is closed")
+
+def getpushup_data(user):
+    try:
+        connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        cursor = connection.cursor()
+        cursor.execute(f"select sum(pushup) from \"pushup\" where user_email = '{user}' and DATE(datetime) >= CURRENT_DATE AND DATE(datetime) < CURRENT_DATE + INTERVAL '1 DAY'")
+        result = cursor.fetchone()[0]
+        return result
+    except (Exception, psycopg2.Error) as error :
+        print ("Error while connecting to PostgreSQL", error)
+        return 0
     finally:
             if(connection):
                 cursor.close()
