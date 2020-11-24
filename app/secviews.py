@@ -57,10 +57,11 @@ def update_database_user(email,name):
         if name == 'Luca':
             team = 'Tim'
         else:
-            team = 'Pepega`s'
+            team = 'Pepegas'
         connection = psycopg2.connect(os.getenv("DATABASE_URL"))
         cursor = connection.cursor()
         cursor.execute("INSERT INTO \"USER\" (email, username,team) VALUES (%s, %s,%s) ON CONFLICT (email) DO UPDATE  SET username=%s,team=%s;",(email,name,team,name,team))
+        session['team'] = team
         connection.commit()
     except (Exception, psycopg2.Error) as error :
         print ("Error while connecting to PostgreSQL", error)

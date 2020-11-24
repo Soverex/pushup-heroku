@@ -13,13 +13,16 @@ def index():
 @app.route("/dashboard")
 @requires_auth
 def dashboard():
+        updateData()
         userinfo = {
-                "team": "Pepega's",
+                "team": session['team'],
                 "pushup_today": session['pushup_day'],
-                "pushup_month": session['pushup_all'] 
+                "pushup_month": session['pushup_all'], 
+                "pushup_gegner": session['pushup_gegner'], 
+                "pushup_team": session['pushup_team'], 
         }
         return render_template("public/dashboard.html", userinfo=userinfo)
-        updateData()
+        
 
 @app.route("/pushup") 
 @requires_auth
