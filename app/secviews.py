@@ -6,6 +6,7 @@ from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
 import os
 import requests
+import psycopg2
 
 app.secret_key = os.getenv("SECRET_KEY")
 oauth = OAuth(app)
@@ -33,6 +34,8 @@ def callback_handling():
     userinfo = resp.json()
     session['jwt_payload'] = userinfo
     session['profile'] = {'user_id': userinfo['sub'],'name': userinfo['name'],'email': userinfo['email'],'picture': userinfo['picture']}
+    #CREATE/UPDATE USER IN DB IF NOT EXIST:
+    update_database_user(session['profile']['email'],session['profile']['name'])
     return redirect('/')
 
 @app.route('/login')
@@ -45,4 +48,18 @@ def logout():
     session.clear()
     params = {'returnTo': f'{os.getenv("BASE_URL")}', 'client_id': os.getenv("CLIENTID")}
     return redirect('https://soverex.eu.auth0.com/v2/logout?' + urlencode(params))
-    
+
+
+def update_database_user(email,name):
+    try:
+        connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO \"USER\" (email, username) VALUES (%s, %s) ON CONFLICT (email) DO UPDATE  SET username=%s;",(email,name,name))
+        connection.commit()
+    except (Exception, psycopg2.Error) as error :
+        print ("Error while connecting to PostgreSQL", error)
+    finally:
+            if(connection):
+                cursor.close()
+                connection.close()
+                print("PostgreSQL connection is closed")

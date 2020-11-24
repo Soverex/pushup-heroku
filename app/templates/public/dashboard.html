@@ -8,6 +8,9 @@
     <a id="hover1" class="nav-link white act" href="/dashboard">Dashboard</a>
 </li>
 <li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white" href="/pushup">Pushup</a>
+</li>
+<li class="navbar-brand nav-item">
     <a id="hover1" class="nav-link white" href="/statistics">Statistiken</a>
 </li>
 <li class="navbar-brand nav-item">
@@ -57,12 +60,23 @@
         </div>
     </div>
 </div>
-
+<style>
+    .table td {
+        border-top: none;
+        padding: unset;
+        width: 80%;
+    }
+    .table{
+        width: unset;
+    }
+</style>
 {% endblock %}
 
 {% block script %}
 <script>
-
+function startDashboard(){
+    window.location.href = "/pushup";
+}
 
 </script>
 {% endblock %}

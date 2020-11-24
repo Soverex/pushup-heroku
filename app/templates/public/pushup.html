@@ -1,0 +1,109 @@
+{% extends "public/templates/dashboard_template.html" %}
+
+{% block title %} Pushup {% endblock %}
+
+
+{% block li %}
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white" href="/dashboard">Dashboard</a>
+</li>
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white act " href="/pushup">Pushup</a>
+</li>
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white" href="/statistics">Statistiken</a>
+</li>
+<li class="navbar-brand nav-item">
+    <a id="hover1" class="nav-link white" href="/admin">Admin</a>
+</li>
+
+{% endblock %}
+
+
+{% block main %}
+
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <h1 style="text-align:center;">IchBinsTim Dashboard</h1>
+            <h4 style="text-align:center;">Dezember Challenge</h4>
+            <br>
+            <hr>
+            <p>Insgesamt: 5</p>
+            <p>Diese Session:</p>
+            <hr>
+            <br>
+            <button onclick="sendPushup()" style="text-decoration: none;outline:none;" class="btn-ps">+1</button>
+            <br>
+            <br>
+            <hr>
+            <div class="col text-center">
+                <button onclick="startDashboard()" class="btn btn-primary">Zurück</button>
+            </div>
+            <hr>
+            <br>
+        </div>
+    </div>
+</div>
+<style>
+    .btn-ps{
+      display: inline-block;
+      text-decoration: none;
+      background: #ff8181;
+      color: #FFF;
+      width: 120px;
+      height: 120px;
+      line-height: 120px;
+      border-radius: 50%;
+      text-align: center;
+      font-weight: bold;
+      vertical-align: middle;
+      overflow: hidden;
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+      border-bottom: solid 3px #bd6565;
+      transition: .4s;
+      border:none;
+  }
+  .btn-ps:disabled{
+      background: #994d4d ;
+  }
+  </style>
+{% endblock %}
+
+{% block script %}
+<script>
+function sendPushup(){
+    $.ajax({
+	url : '{{ base }}/api/data',
+    type : 'POST',
+    data : {
+        'action' : 'addpushup',
+        'user'   : '{{user_mail}}'
+    },
+    dataType:'json',
+    success : function(data) {  
+        //alert('Data: '+data);
+    },
+    error : function(request,error)
+    {
+        if (request.status == 200){
+            //..
+        }else{
+            alert("Request Fehler: "+JSON.stringify(request));
+        }
+    }
+	});
+}
+
+function startDashboard(){
+    window.location.href = "/dashboard";
+}
+$('button.btn-ps').click(function(){
+  var btn = $(this);
+  btn.prop('disabled', true);
+  setTimeout(function(){
+    btn.prop('disabled', false);
+  },1200);
+});
+</script>
+{% endblock %}
