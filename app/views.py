@@ -1,5 +1,6 @@
 from app import app
 from app.secviews import requires_auth
+from app.functions import * 
 import os
 from flask import Flask, render_template, flash, session, request
 import psycopg2
@@ -14,10 +15,11 @@ def index():
 def dashboard():
         userinfo = {
                 "team": "Pepega's",
-                "pushup_today": 9,
-                "pushup_month": 56
+                "pushup_today": session['pushup_day'],
+                "pushup_month": session['pushup_all'] 
         }
         return render_template("public/dashboard.html", userinfo=userinfo)
+        updateData()
 
 @app.route("/pushup") 
 @requires_auth
@@ -39,33 +41,3 @@ def api_data():
                 return {
                         "success" : "false"
                 }
-
-def addpushup(user):
-    try:
-        connection = psycopg2.connect(os.getenv("DATABASE_URL"))
-        cursor = connection.cursor()
-        cursor.execute(f"INSERT INTO \"pushup\" (user_email, datetime, pushup) VALUES ('{user}', current_timestamp, 1);")
-        connection.commit()
-    except (Exception, psycopg2.Error) as error :
-        print ("Error while connecting to PostgreSQL", error)
-    finally:
-            if(connection):
-                cursor.close()
-                connection.close()
-                print("PostgreSQL connection is closed")
-
-def getpushup_data(user):
-    try:
-        connection = psycopg2.connect(os.getenv("DATABASE_URL"))
-        cursor = connection.cursor()
-        cursor.execute(f"select sum(pushup) from \"pushup\" where user_email = '{user}' and DATE(datetime) >= CURRENT_DATE AND DATE(datetime) < CURRENT_DATE + INTERVAL '1 DAY'")
-        result = cursor.fetchone()[0]
-        return result
-    except (Exception, psycopg2.Error) as error :
-        print ("Error while connecting to PostgreSQL", error)
-        return 0
-    finally:
-            if(connection):
-                cursor.close()
-                connection.close()
-                print("PostgreSQL connection is closed")

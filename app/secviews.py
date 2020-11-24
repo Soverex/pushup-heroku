@@ -1,4 +1,5 @@
 from app import app
+from app.functions import * 
 from flask import Flask, jsonify, redirect, render_template, session
 from functools import wraps
 import json
@@ -36,6 +37,7 @@ def callback_handling():
     session['profile'] = {'user_id': userinfo['sub'],'name': userinfo['name'],'email': userinfo['email'],'picture': userinfo['picture']}
     #CREATE/UPDATE USER IN DB IF NOT EXIST:
     update_database_user(session['profile']['email'],session['profile']['name'])
+    updateData()
     return redirect('/')
 
 @app.route('/login')
@@ -52,9 +54,13 @@ def logout():
 
 def update_database_user(email,name):
     try:
+        if name == 'Luca':
+            team = 'Tim'
+        else:
+            team = 'Pepega`s'
         connection = psycopg2.connect(os.getenv("DATABASE_URL"))
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO \"USER\" (email, username) VALUES (%s, %s) ON CONFLICT (email) DO UPDATE  SET username=%s;",(email,name,name))
+        cursor.execute("INSERT INTO \"USER\" (email, username,team) VALUES (%s, %s,%s) ON CONFLICT (email) DO UPDATE  SET username=%s,team=%s;",(email,name,team,name,team))
         connection.commit()
     except (Exception, psycopg2.Error) as error :
         print ("Error while connecting to PostgreSQL", error)
