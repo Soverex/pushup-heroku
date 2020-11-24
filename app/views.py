@@ -1,32 +1,8 @@
 from app import app
 from app.secviews import requires_auth
 import os
-from flask import Flask, render_template, flash, session
+from flask import Flask, render_template, flash, session, request
 import psycopg2
-
-try:
-    connection = psycopg2.connect(os.getenv("DATABASE_URL"))
-    cursor = connection.cursor()
-    # Print PostgreSQL Connection properties
-    print ( connection.get_dsn_parameters(),"\n")
-
-    # Print PostgreSQL version
-    cursor.execute('SELECT * FROM "USER"')
-    record = cursor.fetchone()
-    print(record)
-    cursor.execute("SELECT version();")
-    record = cursor.fetchone()
-    print("You are connected to - ", record,"\n")
-
-except (Exception, psycopg2.Error) as error :
-    print ("Error while connecting to PostgreSQL", error)
-finally:
-    #closing database connection.
-        if(connection):
-            cursor.close()
-            connection.close()
-            print("PostgreSQL connection is closed")
-
 
 @app.route("/")
 @requires_auth
@@ -50,7 +26,28 @@ def pushup():
 
 @app.route("/api/data", methods=['POST']) 
 @requires_auth
-def apt_data(): 
-        return{
-                "success" : "true"
-        }
+def api_data():
+        if request.form.get("action") == "addpushup" and request.form.get("user") != "":
+                addpushup(request.form.get("user"))
+                return{
+                        "success" : "true",
+                }
+        else:
+                return {
+                        "success" : "false"
+                }
+
+def addpushup(user):
+    try:
+        print(user)
+        connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        cursor = connection.cursor()
+        cursor.execute(f"INSERT INTO \"pushup\" (user_email, datetime, pushup) VALUES ('{user}', current_timestamp, 1);")
+        connection.commit()
+    except (Exception, psycopg2.Error) as error :
+        print ("Error while connecting to PostgreSQL", error)
+    finally:
+            if(connection):
+                cursor.close()
+                connection.close()
+                print("PostgreSQL connection is closed")
