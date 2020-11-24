@@ -29,8 +29,8 @@
             <h4 style="text-align:center;">Dezember Challenge</h4>
             <br>
             <hr>
-            <p>Insgesamt: 5</p>
-            <p>Diese Session:</p>
+            <p id="pushup_day">Diesen Tag: {{session['pushup_day']}}</p>
+            <p>Diese Session: <span id="session">0</span></p>
             <hr>
             <br>
             <button onclick="sendPushup()" style="text-decoration: none;outline:none;" class="btn-ps">+1</button>
@@ -82,12 +82,16 @@ function sendPushup(){
     },
     dataType:'json',
     success : function(data) {  
-        //alert('Data: '+data);
+        console.log(data);
+        $('#pushup_day').text("Diesen Tag: "+data.data);
+
+        $('#session').text(parseInt($('#session').text())+1);
+
     },
     error : function(request,error)
     {
         if (request.status == 200){
-            //..
+            //
         }else{
             alert("Request Fehler: "+JSON.stringify(request));
         }

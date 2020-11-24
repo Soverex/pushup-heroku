@@ -30,9 +30,10 @@ def api_data():
         if request.form.get("action") == "addpushup" and request.form.get("user") != "":
                 addpushup(request.form.get("user"))
                 data = getpushup_data(request.form.get("user"))
+                session['pushup_day'] = data
                 return{
                         "success" : "true",
-                        "data"    : f"{data}",
+                        "data"    : f"{data}"
                 }
         else:
                 return {
