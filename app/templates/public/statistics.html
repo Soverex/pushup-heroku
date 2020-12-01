@@ -27,8 +27,25 @@
         <div class="col text-center">
             <h1 style="text-align:center;">IchBinsTim Statistiken</h1>
             <h4 style="text-align:center;">Dezember Challenge</h4>
-            <p>Nothing here :(</p>
             <canvas id="myChart"></canvas>
+            <table class="table">
+                <thead>
+                    <tr>
+                        {% for x in tableHead %}
+                        <th scope="col">{{x}}</th>
+                        {% endfor %}
+                  
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% for x in tableEntry %}
+                        <td>{{x|safe }}</td>
+                        {% endfor %}
+                 
+                    </tr>
+                </tbody>
+            </table>
             <div class="col text-center">
                 <button onclick="startDashboard()" class="btn btn-primary">Zurück</button>
             </div>
@@ -44,27 +61,36 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0">
 </script>
 <script>
-function startDashboard(){
-    window.location.href = "/dashboard";
-}
-var ctx = document.getElementById('myChart').getContext('2d');
-var chart = new Chart(ctx, {
-    // The type of chart we want to create
-    type: 'bar',
+    function startDashboard() {
+        window.location.href = "/dashboard";
+    }
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'bar',
 
-    // The data for our dataset
-    data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [{
-            label: 'My First dataset',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: [0, 10, 5, 2, 20, 30, 45]
+        // The data for our dataset
+        data: {
+            labels: {{ indexList| safe}},
+    datasets: [{
+        label: 'Auflistung nach Person',
+        backgroundColor: '#31ccd4',
+        borderColor: '#31ccd4',
+        data: {{ pushupList }}
         }]
     },
 
     // Configuration options go here
-    options: {}
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
 });
+
 </script>
 {% endblock %}

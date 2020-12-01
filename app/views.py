@@ -4,6 +4,8 @@ from app.functions import *
 import os
 from flask import Flask, render_template, flash, session, request
 import psycopg2
+import json
+from datetime import datetime
 
 @app.route("/")
 @requires_auth
@@ -31,8 +33,21 @@ def pushup():
 
 @app.route("/statistics") 
 @requires_auth
-def statistics(): 
-        return render_template("public/statistics.html")
+def statistics():
+        indexList = []
+        pushupList = []
+        tableEntry = []
+        tableHead = []
+        res,res2 = updateStats() 
+        for x in res:
+                indexList.append(x[2])
+                pushupList.append(x[1])
+        print(res2)
+        for x in res2:
+                tableHead.append(x[3].strftime("%d.%m.%Y"))
+                tableEntry.append(f"<b>Name: </b>{x[1]}<br><b>Pushups: </b>{x[2]}")
+        print(tableHead)
+        return render_template("public/statistics.html",indexList=json.dumps(indexList),pushupList=pushupList, tableHead=tableHead,tableEntry=tableEntry)
 
 @app.route("/admin") 
 @requires_auth

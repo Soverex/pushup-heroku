@@ -62,3 +62,34 @@ def getpushup_data(user):
                 cursor.close()
                 connection.close()
                 print("PostgreSQL connection is closed")
+
+def updateStats():
+    try:
+        connection = psycopg2.connect(os.getenv("DATABASE_URL"))
+        cursor = connection.cursor()
+        cursor.execute("""
+        select  user_email ,sum(pushup), username from "pushup" INNER JOIN "USER" ON "USER".email ="pushup".user_email  group by user_email,username
+        order by sum(pushup) DESC;
+        """)
+        result = cursor.fetchall()
+        
+
+        cursor.execute("""
+        select user_email ,username, sum(pushup),
+        date_trunc('day', datetime) as "Day2"
+        from "pushup"
+        INNER JOIN "USER" ON "USER".email ="pushup".user_email
+        group by "Day2" ,user_email,username 
+        ORDER BY "Day2" ASC 
+        """)
+        result2 = cursor.fetchall()
+        return result, result2
+
+    except (Exception, psycopg2.Error) as error :
+        print ("Error while connecting to PostgreSQL", error)
+
+    finally:
+            if(connection):
+                cursor.close()
+                connection.close()
+                print("PostgreSQL connection is closed")
