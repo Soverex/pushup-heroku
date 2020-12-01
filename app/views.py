@@ -42,11 +42,9 @@ def statistics():
         for x in res:
                 indexList.append(x[2])
                 pushupList.append(x[1])
-        print(res2)
         for x in res2:
                 tableHead.append(x[3].strftime("%d.%m.%Y"))
                 tableEntry.append(f"<b>Name: </b>{x[1]}<br><b>Pushups: </b>{x[2]}")
-        print(tableHead)
         return render_template("public/statistics.html",indexList=json.dumps(indexList),pushupList=pushupList, tableHead=tableHead,tableEntry=tableEntry)
 
 @app.route("/admin") 
